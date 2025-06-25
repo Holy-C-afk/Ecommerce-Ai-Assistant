@@ -6,9 +6,61 @@
       <div class="card-body">
         <h2 class="card-title mb-3">Generated Description</h2>
         <p class="card-text">{{ description }}</p>
-        <a href="{% url 'description_generator' %}" class="btn btn-outline-primary mt-3">Try another</a>
+        <form method="post" action="{% url 'regenerate_description' %}" class="d-inline">
+          {% csrf_token %}
+          <input type="hidden" name="keywords" value="{{ keywords }}">
+          <input type="hidden" name="style" value="{{ style }}">
+          <button type="submit" class="btn btn-warning mt-2">Regenerate</button>
+        </form>
+        <span class="badge bg-secondary ms-2">Style: {{ style|title }}</span>
+        <a href="{% url 'description_generator' %}" class="btn btn-outline-primary mt-3 ms-2">Try another</a>
       </div>
     </div>
   </div>
 </div>
+{% if history %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-10">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title mb-3">History</h4>
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Keywords</th>
+                <th>Description</th>
+                <th>Generated At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in history %}
+              <tr>
+                <td>{{ item.keywords }}</td>
+                <td><span id="desc-{{ item.id }}">{{ item.generated_description }}</span></td>
+                <td>{{ item.created_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                  <button class="btn btn-outline-secondary btn-sm" onclick="copyToClipboard('desc-{{ item.id }}')">Copy</button>
+                  <a href="{% url 'download_description' item.id %}" class="btn btn-outline-info btn-sm">Download</a>
+                  <a href="{% url 'delete_description' item.id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this description?');">Delete</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function copyToClipboard(elementId) {
+  var text = document.getElementById(elementId).innerText;
+  navigator.clipboard.writeText(text).then(function() {
+    alert('Copied to clipboard!');
+  });
+}
+</script>
+{% endif %}
 {% endblock %} 
