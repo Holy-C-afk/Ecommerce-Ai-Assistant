@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>AI Product Description Generator</h2>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="keywords" placeholder="Enter keywords" required />
+    <button type="submit">Generate</button>
+</form>
+{% endblock %} 

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Your Cart</h2>
+<ul>
+    {% for item in items %}
+        <li>{{ item.product.title }} (x{{ item.quantity }})</li>
+    {% empty %}
+        <li>Your cart is empty.</li>
+    {% endfor %}
+</ul>
+{% endblock %} 

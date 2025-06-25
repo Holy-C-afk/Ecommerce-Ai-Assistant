@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Generated Description</h2>
+<p>{{ description }}</p>
+<a href="{% url 'description_generator' %}">Try another</a>
+{% endblock %} 
