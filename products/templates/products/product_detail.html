@@ -1,10 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>{{ product.title }}</h2>
-<p>{{ product.description }}</p>
-<p>Category: {{ product.category.name }}</p>
-<p>Price: ${{ product.price }}</p>
-{% if product.image %}
-    <img src="{{ product.image.url }}" alt="{{ product.title }}" width="200" />
-{% endif %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card mb-4">
+      <div class="row g-0">
+        {% if product.image %}
+        <div class="col-md-4">
+          <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="{{ product.title }}">
+        </div>
+        {% endif %}
+        <div class="col-md-8">
+          <div class="card-body">
+            <h2 class="card-title">{{ product.title }}</h2>
+            <p class="card-text">{{ product.description }}</p>
+            <p class="card-text"><small class="text-muted">Category: {{ product.category.name }}</small></p>
+            <h4 class="card-text">${{ product.price }}</h4>
+            <form method="post" action="{% url 'orders:add_to_cart' product.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success mt-3">Add to Cart</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %} 
